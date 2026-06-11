@@ -1,0 +1,67 @@
+---
+title: 'Give the robot a scoped token'
+description: 'AI tooling is inside the SDLC now — reading repos, opening PRs, calling CI. The security work is unglamorous, and most of it is IAM.'
+pubDate: 2026-06-11
+tags: ['ai', 'security', 'devsecops']
+---
+
+The interesting thing about AI tooling in the development lifecycle is
+not the novelty. It is that almost every failure mode it introduces is
+one we already had a name for.
+
+An editor assistant that reads your repository, a bot that opens pull
+requests, an agent that can trigger CI — each of these is a new
+*principal* in your system: an identity that holds credentials and takes
+actions. We have decades of practice securing principals. The problem is
+that much of the industry stopped practicing, and the robots are about
+to make the gaps visible.
+
+## Identity: stop lending your keys
+
+The path of least resistance for a new automation tool is also the
+worst one: it runs with a personal access token borrowed from whichever
+engineer set it up. Now there is a credential with one person's full
+permissions, used by a machine, on no rotation schedule, that keeps
+working after that person leaves.
+
+A tool gets its own identity (a service account, a bot user, a
+workload identity), with credentials that are short-lived and issued
+per use where the platform allows it. This is not AI-specific advice.
+It was never going to be.
+
+## Authorization: read-only is a default, not a punishment
+
+Start every tool at read-only and promote it grudgingly. A coding
+assistant that suggests changes needs to read code; it does not need
+push access to anything. An agent that opens pull requests needs to
+write to *its own branches* — never to main, which is what protected
+branches enforce mechanically. Done this way, an agent's output enters
+through the same gate as any human contractor's: a reviewable diff that
+a human approves and owns.
+
+The question to ask of every permission is blast radius: if this tool
+misbehaves — through a bug, a prompt injection, or a compromised
+upstream — what is the worst afternoon it can give you?
+
+## Secrets: the context window is an egress path
+
+Anything a tool can read can end up in a request to someone else's
+infrastructure. That has an old name too: data egress. The mitigations
+are familiar — secrets do not live in repositories (they never should
+have; the assistants are just re-teaching the lesson), logs that flow
+into tooling get redacted, and tools that phone home are subject to
+egress and data-residency decisions like any other vendor, which in
+regulated environments is a real review and not a checkbox.
+
+## Audit trails and kill switches
+
+Every action a tool takes should be attributable to *that tool* in the
+audit log — which falls out naturally from giving it its own identity
+and breaks immediately if it borrowed a human's. And revocation should
+be one operation: disable this principal, now, without rotating half
+the company's credentials because they were shared.
+
+None of this is exotic. Least privilege, dedicated identities, blast
+radius — it is the IAM chapter every platform team has already read.
+The robots did not change the chapter; they changed the price of
+skipping it.

@@ -1,0 +1,72 @@
+---
+title: 'The audit was already written'
+description: 'GitOps turns change management from a documentation chore into a property of the system. What auditors actually ask for, and why your git history already has it.'
+pubDate: 2026-06-11
+tags: ['gitops', 'compliance', 'devsecops']
+---
+
+Compliance audits of a deployment process keep circling the same four
+questions. What changed? Who approved it? When did it reach production?
+And if it had gone wrong, could you have undone it?
+
+The traditional way to answer those questions is archaeology. Someone
+spends a sprint pulling ticket exports, chasing approval emails, and
+screenshotting consoles, trying to reconstruct a paper trail for changes
+that happened months ago. The evidence is sampled, lossy, and assembled
+under deadline pressure — which is a strange way to prove that a process
+is under control.
+
+The GitOps answer is structurally different: the system that *performs*
+the change is the same system that *records* it. There is no second
+artifact to assemble, because the deployment mechanism is the paper
+trail.
+
+## Mapping the controls
+
+Take the standard change-management expectations and put them next to a
+reasonably configured GitOps setup — ArgoCD, in the environments I work
+in:
+
+- **Authorization.** A protected branch with required review means an
+  unapproved change does not have a sanctioned path to production. The
+  control is not a policy document asking people to behave; it is a
+  permission model in which the bad action does not exist.
+- **Attribution and timestamps.** Every change is a commit and a merge
+  with a reviewer, timestamped and tamper-evident — immutable in
+  practice once force-pushes are blocked, with attribution riding on
+  platform identity rather than the self-asserted author line. Nobody
+  writes this down because nobody has to.
+- **Segregation of duties.** Author and approver are distinct
+  identities, enforced by the platform rather than by trust.
+- **Rollback.** A revert is a first-class operation, and your history
+  of reverts is *evidence that rollback works in practice* — something
+  a disaster-recovery binder can only claim.
+- **Drift detection.** A reconciliation loop that converges the runtime
+  toward the declared state is a continuous control. The interesting
+  audit question inverts: it is no longer "how do you know production
+  matches the approved configuration?" but "show me an alert from the
+  last time it didn't."
+
+## What it doesn't buy you
+
+Honesty matters here, because "we do GitOps" is not a compliance
+strategy by itself.
+
+Git history proves nothing if the repository's controls are weak — a
+repo where anyone can push to main, or where review is a rubber stamp
+from a teammate's second account, produces beautiful-looking evidence of
+an uncontrolled process. Break-glass access paths, changes to
+infrastructure that lives outside the repository, secrets handling, and
+access reviews all still need their own answers. And auditors are
+entitled to test the control, not just admire the tooling: expect to
+demonstrate that an unreviewed change actually gets rejected.
+
+The goal is narrower and more useful: every question about *changes*
+should be answerable from systems of record that were going to exist
+anyway. Audit preparation time for the deployment process trends toward
+zero, not because anyone worked harder, but because evidence became a
+byproduct of shipping.
+
+Screenshots are what you produce when the system of record is somewhere
+else. Put the system of record in the deploy path, and the audit writes
+itself as you work.

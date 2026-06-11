@@ -1,0 +1,64 @@
+---
+title: 'Code nobody wrote still has to pass the gate'
+description: 'AI-generated changes are landing in regulated codebases. The answer is not banning them — it is remembering what your pipeline was built for.'
+pubDate: 2026-06-11
+tags: ['ai', 'devsecops', 'ci-cd']
+---
+
+A growing share of the diffs arriving in code review are not typed by
+the person who opens them. Depending on where you work, that sentence
+lands somewhere between "obviously" and "not in *this* codebase" — and
+in regulated environments the reflex is often prohibition.
+
+I think the prohibition reflex misreads what CI/CD was for in the first
+place.
+
+A deployment pipeline is an admission-control system for untrusted
+changes. That is its entire job. And the uncomfortable truth is that the
+changes were never trustworthy *before* the machines showed up — humans
+write plausible-looking bugs at two in the morning, copy code from old
+Stack Overflow answers, and introduce vulnerable dependencies with
+complete confidence. The gate was never *just* "do we trust the
+author." It was "did the change survive the checks." If your controls
+only worked because authors were careful, they were never controls.
+
+## What stays the same
+
+Most of the playbook for AI-authored changes is the playbook you should
+already have:
+
+- **Tests are the spec.** A generated change with green, meaningful
+  tests comes with evidence; a generated change without them is a guess
+  with good posture. The discipline of demanding behavioral proof predates
+  the tools and survives them.
+- **Scanning does not care about authorship.** Static analysis, secret
+  detection, and dependency scanning ask "what does this code do," not
+  "who wrote it." They are exactly as necessary as they were before.
+- **Small diffs or no review.** Review capacity becomes the bottleneck
+  when generation is cheap. The countermeasure is structural: keep
+  changes small enough that a human can actually hold them, because a
+  thousand-line PR gets approved on vibes regardless of its author.
+
+## What actually changes
+
+Two things do change.
+
+**Dependency suggestion is a new supply-chain surface.** Generative
+tools sometimes propose packages that are obscure, abandoned, or — in
+the worst case — don't exist until someone registers the name and fills
+it with something hostile. Lockfiles, registry allowlists, and "a new
+dependency is an architectural decision, not an import statement" stop
+being hygiene advice and start being load-bearing.
+
+**Accountability cannot be generated.** Change control in the
+environments I work in — PCI DSS, SOC 2 — ultimately attaches every
+production change to an accountable human. A tool can author a change; it cannot own one. The
+approver who merges is asserting "I understand this and accept
+responsibility" — and that assertion is the one part of the process
+that must not be automated away. "The model wrote it" will never be an
+acceptable answer in an incident review.
+
+The teams that handle this well won't be the ones with the strictest
+bans or the loudest enthusiasm. They'll be the ones whose pipelines
+were honest about untrusted input all along — for whom the new authors
+are just more traffic through a gate that was already built.
