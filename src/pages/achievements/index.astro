@@ -1,12 +1,41 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('achievements')).sort(
+	(a, b) => Number(b.data.featured) - Number(a.data.featured),
+);
 ---
 
 <BaseLayout title="Work — Joel Thomas">
 	<section class="mx-auto max-w-3xl px-6 py-12">
 		<h1 class="text-3xl font-bold tracking-tight">Work</h1>
-		<p class="mt-4 text-ink-muted">
-			Achievements and projects arrive with the content collections phase.
-		</p>
+		<ul class="mt-8 space-y-4">
+			{
+				entries.map((entry) => (
+					<li>
+						<article class="rounded-xl border border-line bg-surface-raised p-6">
+							<div class="flex items-baseline justify-between gap-4">
+								<h2 class="text-xl font-semibold tracking-tight">
+									{entry.data.title}
+								</h2>
+								<p class="shrink-0 font-mono text-xs text-ink-muted">
+									{entry.data.period}
+								</p>
+							</div>
+							<p class="mt-1 text-sm text-ink-muted">{entry.data.role}</p>
+							<p class="mt-3 text-base">{entry.data.impact}</p>
+							<ul class="mt-4 flex flex-wrap gap-2">
+								{entry.data.stack.map((tech) => (
+									<li class="rounded-full border border-line px-2.5 py-0.5 font-mono text-xs text-ink-muted">
+										{tech}
+									</li>
+								))}
+							</ul>
+						</article>
+					</li>
+				))
+			}
+		</ul>
 	</section>
 </BaseLayout>

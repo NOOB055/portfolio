@@ -1,0 +1,5 @@
+name: 'Certified Kubernetes Administrator (CKA)'
+issuer: 'The Linux Foundation'
+issueDate: 2025-01-15
+credentialId: 'PLACEHOLDER-REPLACE-ME'
+verifyUrl: 'https://training.linuxfoundation.org/certification/verify/'

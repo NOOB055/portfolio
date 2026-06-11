@@ -1,12 +1,45 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate } from '../utils/format';
+
+const certs = (await getCollection('certifications')).sort(
+	(a, b) => b.data.issueDate.valueOf() - a.data.issueDate.valueOf(),
+);
 ---
 
 <BaseLayout title="Certifications — Joel Thomas">
 	<section class="mx-auto max-w-3xl px-6 py-12">
 		<h1 class="text-3xl font-bold tracking-tight">Certifications</h1>
-		<p class="mt-4 text-ink-muted">
-			Credentials arrive with the content collections phase.
-		</p>
+		<ul class="mt-8 divide-y divide-line">
+			{
+				certs.map((cert) => (
+					<li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-4">
+						<div>
+							<h2 class="text-base font-medium">{cert.data.name}</h2>
+							<p class="mt-0.5 text-sm text-ink-muted">{cert.data.issuer}</p>
+						</div>
+						<div class="flex items-baseline gap-4">
+							<time
+								datetime={cert.data.issueDate.toISOString()}
+								class="font-mono text-xs text-ink-muted"
+							>
+								{formatDate(cert.data.issueDate)}
+							</time>
+							{cert.data.verifyUrl && (
+								<a
+									href={cert.data.verifyUrl}
+									target="_blank"
+									rel="noopener"
+									class="font-mono text-xs text-accent hover:underline"
+								>
+									verify ↗
+								</a>
+							)}
+						</div>
+					</li>
+				))
+			}
+		</ul>
 	</section>
 </BaseLayout>

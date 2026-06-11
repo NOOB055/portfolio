@@ -1,12 +1,39 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../utils/format';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 ---
 
 <BaseLayout title="Blog — Joel Thomas">
 	<section class="mx-auto max-w-3xl px-6 py-12">
 		<h1 class="text-3xl font-bold tracking-tight">Blog</h1>
-		<p class="mt-4 text-ink-muted">
-			Posts arrive with the content collections phase.
-		</p>
+		<ul class="mt-8 space-y-8">
+			{
+				posts.map((post) => (
+					<li>
+						<article>
+							<a href={`/blog/${post.id}`} class="group block">
+								<div class="flex items-baseline justify-between gap-4">
+									<h2 class="text-lg font-medium transition-colors group-hover:text-accent">
+										{post.data.title}
+									</h2>
+									<time
+										datetime={post.data.pubDate.toISOString()}
+										class="shrink-0 font-mono text-xs text-ink-muted"
+									>
+										{formatDate(post.data.pubDate)}
+									</time>
+								</div>
+								<p class="mt-1 text-sm text-ink-muted">{post.data.description}</p>
+							</a>
+						</article>
+					</li>
+				))
+			}
+		</ul>
 	</section>
 </BaseLayout>
