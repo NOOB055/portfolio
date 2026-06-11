@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 interface Props {
 	title: string;
@@ -29,7 +31,17 @@ const { title, description = 'Joel Thomas — DevSecOps & Platform Engineering' 
 				(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 		</script>
 	</head>
-	<body class="min-h-screen bg-surface font-sans text-ink antialiased">
-		<slot />
+	<body class="flex min-h-screen flex-col bg-surface font-sans text-ink antialiased">
+		<a
+			href="#main"
+			class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-20 focus:rounded-md focus:bg-surface-raised focus:px-3 focus:py-2 focus:text-sm focus:outline-2 focus:outline-accent"
+		>
+			Skip to content
+		</a>
+		<SiteHeader />
+		<main id="main" class="flex-1">
+			<slot />
+		</main>
+		<SiteFooter />
 	</body>
 </html>

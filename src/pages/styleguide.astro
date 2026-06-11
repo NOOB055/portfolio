@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const typeRamp = [
+	{ cls: 'text-5xl font-bold tracking-tight', label: 'text-5xl' },
+	{ cls: 'text-4xl font-bold tracking-tight', label: 'text-4xl' },
+	{ cls: 'text-3xl font-semibold tracking-tight', label: 'text-3xl' },
+	{ cls: 'text-2xl font-semibold', label: 'text-2xl' },
+	{ cls: 'text-xl font-medium', label: 'text-xl' },
+	{ cls: 'text-lg font-medium', label: 'text-lg' },
+	{ cls: 'text-base', label: 'text-base' },
+	{ cls: 'text-sm', label: 'text-sm' },
+	{ cls: 'text-xs', label: 'text-xs' },
+];
+
+const swatches = [
+	{ token: 'surface', cls: 'bg-surface' },
+	{ token: 'surface-raised', cls: 'bg-surface-raised' },
+	{ token: 'ink', cls: 'bg-ink' },
+	{ token: 'ink-muted', cls: 'bg-ink-muted' },
+	{ token: 'line', cls: 'bg-line' },
+	{ token: 'accent', cls: 'bg-accent' },
+];
+---
+
+<BaseLayout
+	title="Style Guide — Joel Thomas"
+	description="Living style guide: the design tokens, type scale, and components this site is built from."
+>
+	<div class="mx-auto max-w-3xl px-6 py-12">
+		<header class="mb-12">
+			<p class="font-mono text-xs text-accent">living style guide</p>
+			<h1 class="text-3xl font-bold tracking-tight">Design Tokens</h1>
+		</header>
+
+		<section class="mb-12">
+			<h2 class="mb-4 border-b border-line pb-2 text-sm font-medium text-ink-muted">
+				Fluid type scale — resize the window and watch sizes interpolate
+			</h2>
+			<ul class="space-y-3">
+				{
+					typeRamp.map(({ cls, label }) => (
+						<li class="flex items-baseline gap-4">
+							<span class="w-20 shrink-0 font-mono text-xs text-ink-muted">{label}</span>
+							<span class={cls}>Deploy with confidence</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section class="mb-12">
+			<h2 class="mb-4 border-b border-line pb-2 text-sm font-medium text-ink-muted">
+				Color tokens — semantic, theme-aware
+			</h2>
+			<ul class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+				{
+					swatches.map(({ token, cls }) => (
+						<li class="overflow-hidden rounded-lg border border-line">
+							<div class={`h-16 ${cls}`} />
+							<p class="bg-surface-raised px-3 py-2 font-mono text-xs text-ink-muted">
+								{token}
+							</p>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<section>
+			<h2 class="mb-4 border-b border-line pb-2 text-sm font-medium text-ink-muted">
+				Composed sample — card, prose, code
+			</h2>
+			<article class="rounded-xl border border-line bg-surface-raised p-6">
+				<p class="font-mono text-xs text-accent">achievement</p>
+				<h3 class="mt-1 text-xl font-semibold tracking-tight">
+					Multi-cluster GitOps platform
+				</h3>
+				<p class="mt-2 text-base text-ink-muted">
+					Select this paragraph to see the accent selection color. Every color
+					on this page is a semantic token — flip the theme and nothing names a
+					raw value.
+				</p>
+				<pre
+					class="mt-4 overflow-x-auto rounded-lg bg-surface p-4 font-mono text-sm"><code>kubectl get applications -n argocd</code></pre>
+			</article>
+		</section>
+	</div>
+</BaseLayout>
