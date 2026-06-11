@@ -38,7 +38,7 @@ const certifications = defineCollection({
 		issueDate: z.coerce.date(),
 		expiryDate: z.coerce.date().optional(),
 		credentialId: z.string().optional(),
-		verifyUrl: z.string().url().optional(),
+		verifyUrl: z.url().optional(),
 	}),
 });
 
