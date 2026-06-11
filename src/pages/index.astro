@@ -4,24 +4,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PipelineSection from '../components/pipeline/PipelineSection.astro';
 import AchievementCard from '../components/AchievementCard.astro';
 import PostRow from '../components/PostRow.astro';
+import { getPublishedPosts } from '../utils/collections';
 
 const featured = await getCollection('achievements', ({ data }) => data.featured);
 
-const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 3);
+const recentPosts = (await getPublishedPosts()).slice(0, 3);
 ---
 
 <BaseLayout title="Joel Thomas — DevSecOps Engineer">
 	<section class="mx-auto max-w-3xl px-6 py-24">
 		<p class="font-mono text-sm text-accent">~/joel.thomas</p>
 		<h1 class="mt-3 text-5xl font-bold tracking-tight text-balance">
-			DevSecOps engineer building paved roads to production.
+			DevSecOps engineer who keeps mission-critical deploys boring.
 		</h1>
 		<p class="mt-6 max-w-xl text-lg text-ink-muted">
-			Placeholder copy — I design and run GitOps platforms, multi-cluster
-			Kubernetes, and the CI/CD pipelines that keep deploys boring. We will
-			write the real positioning statement together in the content phase.
+			Secure, compliant infrastructure for Tier-1 banks and healthcare
+			platforms — AWS, Kubernetes, GitOps. Four-plus years across three
+			regulated industries.
 		</p>
 	</section>
 
@@ -82,10 +81,18 @@ const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
 				Let's talk infrastructure.
 			</h2>
 			<p class="mx-auto mt-3 max-w-md text-sm text-ink-muted">
-				Placeholder — open to principal-track DevSecOps and platform roles.
-				Links activate when we wire up your public profiles.
+				Open to senior DevSecOps and platform engineering roles. LinkedIn is
+				the fastest way to reach me; the code lives on GitHub.
 			</p>
 			<div class="mt-6 flex items-center justify-center gap-4">
+				<a
+					href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"
+					target="_blank"
+					rel="me noopener"
+					class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+				>
+					linkedin ↗
+				</a>
 				<a
 					href="https://github.com/NOOB055"
 					target="_blank"

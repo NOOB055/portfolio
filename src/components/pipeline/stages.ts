@@ -4,33 +4,30 @@ export interface PipelineStage {
 	body: string;
 }
 
-/*
- * Placeholder copy — rewrite in Joel's voice during the content phase.
- */
 export const stages: PipelineStage[] = [
 	{
 		id: 'build',
 		title: 'Build',
-		body: 'Hermetic builds, pinned dependencies, containers addressed by digest — artifacts that can be reproduced, not just rebuilt.',
+		body: 'Jenkins builds every service into a digest-pinned container — one artifact, promoted through every environment, never rebuilt on the way to production.',
 	},
 	{
 		id: 'test',
 		title: 'Test',
-		body: 'Fast unit gates and integration suites against ephemeral environments — failures surface in minutes, not after merge.',
+		body: 'Unit and integration gates run on every merge request. A red pipeline blocks the road to production — no exceptions, no manual overrides.',
 	},
 	{
 		id: 'secure',
 		title: 'Secure',
-		body: 'SAST, dependency and image scanning, SBOMs, policy-as-code admission — security as a pipeline stage, not a quarterly audit.',
+		body: 'Static analysis, dependency and image scanning, and compliance-as-code — PCI DSS and SOC 2 evidence flows out of the pipeline itself, not a quarterly scramble.',
 	},
 	{
 		id: 'deploy',
 		title: 'Deploy',
-		body: 'Pull-based GitOps: the cluster converges on what Git declares. Rollback is a revert, not a war room.',
+		body: 'ArgoCD pulls what Git declares; Terraform shapes identical environments across US, EU, and Singapore. Rollback is a revert, not a war room.',
 	},
 	{
 		id: 'observe',
 		title: 'Observe',
-		body: 'Golden signals, SLOs, and alerts that page on symptoms — the feedback loop that keeps deploys boring.',
+		body: 'Monitoring and auto-recovery hold 99.9% uptime targets. Alerts page on symptoms, and every incident feeds back into the pipeline.',
 	},
 ];

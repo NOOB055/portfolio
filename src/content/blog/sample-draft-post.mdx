@@ -1,8 +1,10 @@
 ---
-title: 'Draft: this post must never appear on the site'
-description: 'Verification fixture — if you can see this on the blog index, draft filtering is broken.'
+title: 'Draft canary — visible in dev, never in production'
+description: 'Permanent test fixture: if this appears on the live site, draft filtering is broken.'
 pubDate: 2026-06-12
 draft: true
 ---
 
-If this renders anywhere on the built site, the `draft` filter has a bug.
+This file stays in the repo forever as a canary. It should be visible when
+running `npm run dev` (so drafts can be previewed) and must never appear on
+the built, deployed site.

@@ -35,7 +35,8 @@ const certifications = defineCollection({
 	schema: z.object({
 		name: z.string(),
 		issuer: z.string(),
-		issueDate: z.coerce.date(),
+		/* optional until real completion dates are pulled from the issuer */
+		issueDate: z.coerce.date().optional(),
 		expiryDate: z.coerce.date().optional(),
 		credentialId: z.string().optional(),
 		verifyUrl: z.url().optional(),

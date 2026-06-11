@@ -4,7 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatDate } from '../utils/format';
 
 const certs = (await getCollection('certifications')).sort(
-	(a, b) => b.data.issueDate.valueOf() - a.data.issueDate.valueOf(),
+	(a, b) =>
+		(b.data.issueDate?.valueOf() ?? 0) - (a.data.issueDate?.valueOf() ?? 0),
 );
 ---
 
@@ -20,12 +21,14 @@ const certs = (await getCollection('certifications')).sort(
 							<p class="mt-0.5 text-sm text-ink-muted">{cert.data.issuer}</p>
 						</div>
 						<div class="flex items-baseline gap-4">
-							<time
-								datetime={cert.data.issueDate.toISOString()}
-								class="font-mono text-xs text-ink-muted"
-							>
-								{formatDate(cert.data.issueDate)}
-							</time>
+							{cert.data.issueDate && (
+								<time
+									datetime={cert.data.issueDate.toISOString()}
+									class="font-mono text-xs text-ink-muted"
+								>
+									{formatDate(cert.data.issueDate)}
+								</time>
+							)}
 							{cert.data.verifyUrl && (
 								<a
 									href={cert.data.verifyUrl}

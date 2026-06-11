@@ -1,11 +1,12 @@
 ---
 import type { InferGetStaticPropsType } from 'astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatDate } from '../../utils/format';
+import { getPublishedPosts } from '../../utils/collections';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog', ({ data }) => !data.draft);
+	const posts = await getPublishedPosts();
 	return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 

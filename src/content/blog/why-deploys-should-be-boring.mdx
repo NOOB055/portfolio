@@ -1,0 +1,43 @@
+---
+title: 'Why deploys should be boring'
+description: 'Excitement during a release is risk wearing a costume. Notes on shipping software for banks and hospitals.'
+pubDate: 2026-06-11
+tags: ['devsecops', 'gitops', 'ci-cd']
+---
+
+The best deploy I have ever been part of was the one nobody watched. No
+war room, no all-hands call, no one refreshing a dashboard with their jaw
+clenched. A change merged, the pipeline went green, production converged,
+and everyone found out it had happened from the changelog.
+
+It took me a while to understand that this is not what low standards look
+like. It is what high standards look like.
+
+I have spent my career so far in places where software failure has unusual
+units — settlement risk at a payments platform, clinical downtime in
+medical imaging. In those rooms you learn quickly that excitement during a
+release is just risk wearing a costume. Every heroic deploy is a process
+failure that got rescued by adrenaline.
+
+## What boring is made of
+
+**Build once, promote forever.** An artifact is built exactly once, pinned
+by digest, and the same bytes move through every environment. If staging
+and production ran different builds, you did not test what you shipped.
+
+**The cluster pulls; humans don't push.** With pull-based GitOps, nobody
+deploys *to* production — production converges on what Git declares. The
+interface for change is a merge request, which means the interface for
+change is a review.
+
+**Rollback is a revert.** If undoing a release requires memory, courage,
+or a senior engineer's weekend, it is not a rollback plan — it is a story
+you tell yourself. `git revert` should be the whole runbook.
+
+**Compliance evidence is a build artifact.** In PCI DSS and SOC 2
+environments, the audit trail should fall out of the pipeline — signed
+artifacts, immutable history, controls as code — not get assembled from
+screenshots the week before an assessment.
+
+None of this is glamorous, and that is the point. Boring is not the
+absence of engineering effort. It is the visible result of it.
