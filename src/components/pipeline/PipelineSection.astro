@@ -22,7 +22,7 @@ import { stages } from './stages';
 		</h2>
 	</header>
 
-	<div class="relative mt-14">
+	<div data-pipeline-track class="relative mt-14">
 		<svg
 			class="absolute top-1 left-[11px] h-full w-0.5 [mask-image:linear-gradient(to_bottom,black_calc(100%-5rem),transparent)]"
 			viewBox="0 0 2 100"
@@ -81,12 +81,13 @@ import { stages } from './stages';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	const section = document.querySelector<HTMLElement>('[data-pipeline]');
+	const track = document.querySelector<HTMLElement>('[data-pipeline-track]');
 	const progress = document.querySelector<SVGLineElement>(
 		'[data-pipeline-progress]',
 	);
 	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	if (section && progress && !reduceMotion) {
+	if (section && track && progress && !reduceMotion) {
 		gsap.registerPlugin(ScrollTrigger);
 
 		const stageEls = gsap.utils.toArray<HTMLElement>('[data-pipeline-stage]');
@@ -94,6 +95,18 @@ import { stages } from './stages';
 		/* Rewind the server-rendered "finished" state before first paint
 		   of the animation: line undrawn, stages inactive. */
 		for (const el of stageEls) el.classList.remove('is-active');
+
+		/* Node positions are measured once per layout pass (initial +
+		   every ScrollTrigger refresh, e.g. resize) so the per-frame
+		   update below does zero layout reads. */
+		let trackHeight = 1;
+		let nodeOffsets: number[] = [];
+		const measure = () => {
+			trackHeight = track.offsetHeight;
+			nodeOffsets = stageEls.map((el) => el.offsetTop + 12);
+		};
+		measure();
+		ScrollTrigger.addEventListener('refresh', measure);
 
 		gsap.fromTo(
 			progress,
@@ -104,19 +117,19 @@ import { stages } from './stages';
 				scrollTrigger: {
 					trigger: section,
 					start: 'top 60%',
-					end: 'bottom 60%',
-					scrub: 0.5,
+					end: 'bottom 90%',
+					scrub: 1,
+					/* Stages are driven by the line tip itself: each node
+					   lights at the exact moment the drawn line touches it,
+					   in either scroll direction. */
+					onUpdate: (self) => {
+						const tipY = self.progress * trackHeight;
+						stageEls.forEach((el, i) => {
+							el.classList.toggle('is-active', (nodeOffsets[i] ?? 0) <= tipY);
+						});
+					},
 				},
 			},
 		);
-
-		for (const el of stageEls) {
-			ScrollTrigger.create({
-				trigger: el,
-				start: 'top 60%',
-				onEnter: () => el.classList.add('is-active'),
-				onLeaveBack: () => el.classList.remove('is-active'),
-			});
-		}
 	}
 </script>
