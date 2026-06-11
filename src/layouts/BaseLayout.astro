@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = 'Joel Thomas — DevSecOps & Platform Engineering' } =
+	Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title}</title>
+		<script is:inline>
+			/*
+			 * Runs synchronously before first paint — the only render-blocking
+			 * JS on the site, and it exists purely to make theme flash
+			 * impossible. Stored preference wins; OS preference is the fallback.
+			 */
+			document.documentElement.dataset.theme =
+				localStorage.getItem('theme') ??
+				(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+		</script>
+	</head>
+	<body class="min-h-screen bg-surface font-sans text-ink antialiased">
+		<slot />
+	</body>
+</html>

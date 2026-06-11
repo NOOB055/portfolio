@@ -1,1 +1,86 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/*
+ * Tailwind's `dark:` variant is driven by an explicit data-theme attribute
+ * (set before first paint by the inline script in BaseLayout), not by
+ * prefers-color-scheme alone — the user's manual choice must win.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------------------------------------------ */
+/* Theme primitives — raw values that flip when data-theme changes.   */
+/* Components never reference these directly.                         */
+/* ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  --surface: oklch(98.5% 0.002 247);
+  --surface-raised: oklch(100% 0 0);
+  --ink: oklch(21% 0.01 252);
+  --ink-muted: oklch(45% 0.015 252);
+  --line: oklch(90% 0.005 247);
+  --accent: oklch(60% 0.13 163);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface: oklch(15% 0.01 252);
+  --surface-raised: oklch(20% 0.012 252);
+  --ink: oklch(93% 0.005 247);
+  --ink-muted: oklch(65% 0.01 252);
+  --line: oklch(28% 0.01 252);
+  --accent: oklch(77% 0.15 163);
+}
+
+/* ------------------------------------------------------------------ */
+/* Semantic design tokens — exposed as Tailwind utilities             */
+/* (bg-surface, text-ink, border-line, text-accent, …).               */
+/* `inline` keeps them as live var() references so utilities flip     */
+/* with the theme at runtime instead of baking in one value.          */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
+}
+
+/* ------------------------------------------------------------------ */
+/* Fluid type scale — minor third (1.2) at 384px viewport easing to   */
+/* major third (1.25) at 1280px. Sizes interpolate linearly between   */
+/* the two; no breakpoint jumps. Line-height tightens as size grows.  */
+/* ------------------------------------------------------------------ */
+@theme {
+  --text-xs: clamp(0.694rem, 0.683rem + 0.046vw, 0.72rem);
+  --text-xs--line-height: 1.5;
+  --text-sm: clamp(0.833rem, 0.804rem + 0.119vw, 0.9rem);
+  --text-sm--line-height: 1.5;
+  --text-base: clamp(1rem, 0.946rem + 0.223vw, 1.125rem);
+  --text-base--line-height: 1.6;
+  --text-lg: clamp(1.2rem, 1.112rem + 0.368vw, 1.406rem);
+  --text-lg--line-height: 1.5;
+  --text-xl: clamp(1.44rem, 1.304rem + 0.568vw, 1.758rem);
+  --text-xl--line-height: 1.4;
+  --text-2xl: clamp(1.728rem, 1.527rem + 0.838vw, 2.197rem);
+  --text-2xl--line-height: 1.3;
+  --text-3xl: clamp(2.074rem, 1.785rem + 1.202vw, 2.747rem);
+  --text-3xl--line-height: 1.2;
+  --text-4xl: clamp(2.488rem, 2.083rem + 1.687vw, 3.433rem);
+  --text-4xl--line-height: 1.1;
+  --text-5xl: clamp(2.986rem, 2.427rem + 2.33vw, 4.292rem);
+  --text-5xl--line-height: 1.05;
+}
+
+/* Text selection inherits the brand accent — a deliberate detail. */
+::selection {
+  background: var(--accent);
+  color: var(--surface);
+}

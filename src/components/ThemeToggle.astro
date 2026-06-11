@@ -1,0 +1,52 @@
+---
+/*
+ * Icon visibility is pure CSS driven by data-theme, so the button is
+ * always in the correct state on first paint — no JS needed to render it.
+ */
+---
+
+<button
+	id="theme-toggle"
+	type="button"
+	aria-label="Switch color theme"
+	class="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-line text-ink-muted transition-colors duration-150 hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+>
+	<!-- moon: shown in light mode, click → dark -->
+	<svg
+		class="block size-4 dark:hidden"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
+	>
+		<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+	</svg>
+	<!-- sun: shown in dark mode, click → light -->
+	<svg
+		class="hidden size-4 dark:block"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
+	>
+		<circle cx="12" cy="12" r="4"></circle>
+		<path
+			d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+		></path>
+	</svg>
+</button>
+
+<script>
+	document.getElementById('theme-toggle')?.addEventListener('click', () => {
+		const next =
+			document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+		document.documentElement.dataset.theme = next;
+		localStorage.setItem('theme', next);
+	});
+</script>
