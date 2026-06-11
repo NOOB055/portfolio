@@ -1,6 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PipelineSection from '../components/pipeline/PipelineSection.astro';
+import AchievementCard from '../components/AchievementCard.astro';
+import PostRow from '../components/PostRow.astro';
+
+const featured = await getCollection('achievements', ({ data }) => data.featured);
+
+const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <BaseLayout title="Joel Thomas — DevSecOps Engineer">
@@ -15,5 +24,77 @@ import PipelineSection from '../components/pipeline/PipelineSection.astro';
 			write the real positioning statement together in the content phase.
 		</p>
 	</section>
+
 	<PipelineSection />
+
+	<section aria-label="Featured work" class="mx-auto max-w-3xl px-6 py-24">
+		<header class="flex items-baseline justify-between">
+			<div>
+				<p class="font-mono text-xs text-accent">proof</p>
+				<h2 class="mt-1 text-3xl font-bold tracking-tight">Featured work</h2>
+			</div>
+			<a
+				href="/achievements"
+				class="font-mono text-xs text-ink-muted transition-colors hover:text-accent"
+			>
+				all work →
+			</a>
+		</header>
+		<ul class="mt-10 space-y-4">
+			{
+				featured.map((entry) => (
+					<li>
+						<AchievementCard entry={entry} />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section aria-label="Recent writing" class="mx-auto max-w-3xl px-6 pb-24">
+		<header class="flex items-baseline justify-between">
+			<div>
+				<p class="font-mono text-xs text-accent">notes</p>
+				<h2 class="mt-1 text-3xl font-bold tracking-tight">Recent writing</h2>
+			</div>
+			<a
+				href="/blog"
+				class="font-mono text-xs text-ink-muted transition-colors hover:text-accent"
+			>
+				all posts →
+			</a>
+		</header>
+		<ul class="mt-10 space-y-8">
+			{
+				recentPosts.map((post) => (
+					<li>
+						<PostRow post={post} />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section aria-label="Contact" class="mx-auto max-w-3xl px-6 pb-24">
+		<div class="rounded-xl border border-line bg-surface-raised p-8 text-center">
+			<p class="font-mono text-xs text-accent">contact</p>
+			<h2 class="mt-1 text-2xl font-bold tracking-tight">
+				Let's talk infrastructure.
+			</h2>
+			<p class="mx-auto mt-3 max-w-md text-sm text-ink-muted">
+				Placeholder — open to principal-track DevSecOps and platform roles.
+				Links activate when we wire up your public profiles.
+			</p>
+			<div class="mt-6 flex items-center justify-center gap-4">
+				<a
+					href="https://github.com/NOOB055"
+					target="_blank"
+					rel="me noopener"
+					class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+				>
+					github ↗
+				</a>
+			</div>
+		</div>
+	</section>
 </BaseLayout>

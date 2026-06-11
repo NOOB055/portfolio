@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AchievementCard from '../../components/AchievementCard.astro';
 
 const entries = (await getCollection('achievements')).sort(
 	(a, b) => Number(b.data.featured) - Number(a.data.featured),
@@ -14,30 +15,7 @@ const entries = (await getCollection('achievements')).sort(
 			{
 				entries.map((entry) => (
 					<li>
-						<article class="rounded-xl border border-line bg-surface-raised p-6">
-							<div class="flex items-baseline justify-between gap-4">
-								<h2 class="text-xl font-semibold tracking-tight">
-									<a
-										href={`/achievements/${entry.id}`}
-										class="transition-colors hover:text-accent"
-									>
-										{entry.data.title}
-									</a>
-								</h2>
-								<p class="shrink-0 font-mono text-xs text-ink-muted">
-									{entry.data.period}
-								</p>
-							</div>
-							<p class="mt-1 text-sm text-ink-muted">{entry.data.role}</p>
-							<p class="mt-3 text-base">{entry.data.impact}</p>
-							<ul class="mt-4 flex flex-wrap gap-2">
-								{entry.data.stack.map((tech) => (
-									<li class="rounded-full border border-line px-2.5 py-0.5 font-mono text-xs text-ink-muted">
-										{tech}
-									</li>
-								))}
-							</ul>
-						</article>
+						<AchievementCard entry={entry} />
 					</li>
 				))
 			}
