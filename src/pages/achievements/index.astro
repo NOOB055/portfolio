@@ -17,7 +17,12 @@ const entries = (await getCollection('achievements')).sort(
 						<article class="rounded-xl border border-line bg-surface-raised p-6">
 							<div class="flex items-baseline justify-between gap-4">
 								<h2 class="text-xl font-semibold tracking-tight">
-									{entry.data.title}
+									<a
+										href={`/achievements/${entry.id}`}
+										class="transition-colors hover:text-accent"
+									>
+										{entry.data.title}
+									</a>
 								</h2>
 								<p class="shrink-0 font-mono text-xs text-ink-muted">
 									{entry.data.period}
