@@ -5,13 +5,19 @@ import tailwindcss from '@tailwindcss/vite';
 
 import mdx from '@astrojs/mdx';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
+  // Canonical origin — swap once when the custom domain arrives;
+  // sitemap, RSS, canonical URLs, and OG tags all derive from it.
+  site: 'https://joel-thomas.joel-personal.workers.dev',
+
   vite: {
     plugins: [tailwindcss()]
   },
 
-  integrations: [mdx()],
+  integrations: [mdx(), sitemap()],
 
   markdown: {
     shikiConfig: {

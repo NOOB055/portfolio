@@ -6,10 +6,17 @@ import SiteFooter from '../components/SiteFooter.astro';
 interface Props {
 	title: string;
 	description?: string;
+	/** OpenGraph type: 'article' for blog/work detail pages. */
+	type?: 'website' | 'article';
 }
 
-const { title, description = 'Joel Thomas — DevSecOps & Platform Engineering' } =
-	Astro.props;
+const {
+	title,
+	description = 'Joel Thomas — DevSecOps & Platform Engineering',
+	type = 'website',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="en">
@@ -20,6 +27,29 @@ const { title, description = 'Joel Thomas — DevSecOps & Platform Engineering' 
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
 		<title>{title}</title>
+		<link rel="canonical" href={canonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:site_name" content="Joel Thomas" />
+		<meta name="twitter:card" content="summary" />
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="Joel Thomas — Blog"
+			href={new URL('rss.xml', Astro.site)}
+		/>
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: light)"
+			content="#fafafa"
+		/>
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: dark)"
+			content="#16161a"
+		/>
 		<script is:inline>
 			/*
 			 * Runs synchronously before first paint — the only render-blocking
