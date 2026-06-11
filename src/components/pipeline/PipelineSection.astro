@@ -1,0 +1,122 @@
+---
+import { stages } from './stages';
+
+/*
+ * Server-rendered state is the FINISHED animation: line fully drawn,
+ * every stage active. Visitors without JS, or with reduced-motion set,
+ * get a complete static graphic. The script below rewinds and binds
+ * progress to scroll only when motion is allowed — animation is an
+ * enhancement, never a requirement.
+ */
+---
+
+<section
+	data-pipeline
+	aria-label="How changes reach production"
+	class="mx-auto max-w-3xl px-6 py-24"
+>
+	<header>
+		<p class="font-mono text-xs text-accent">pipeline</p>
+		<h2 class="mt-1 text-3xl font-bold tracking-tight">
+			How changes reach production
+		</h2>
+	</header>
+
+	<div class="relative mt-14">
+		<svg
+			class="absolute top-1 left-[11px] h-full w-0.5 [mask-image:linear-gradient(to_bottom,black_calc(100%-5rem),transparent)]"
+			viewBox="0 0 2 100"
+			preserveAspectRatio="none"
+			aria-hidden="true"
+		>
+			<line
+				x1="1"
+				y1="0"
+				x2="1"
+				y2="100"
+				class="stroke-line"
+				stroke-width="2"
+				vector-effect="non-scaling-stroke"></line>
+			<line
+				data-pipeline-progress
+				x1="1"
+				y1="0"
+				x2="1"
+				y2="100"
+				pathLength="1"
+				stroke-dasharray="1"
+				stroke-dashoffset="0"
+				class="stroke-accent"
+				stroke-width="2"
+				stroke-linecap="round"
+				vector-effect="non-scaling-stroke"></line>
+		</svg>
+
+		<ol class="space-y-16">
+			{
+				stages.map(({ id, title, body }, i) => (
+					<li
+						id={`stage-${id}`}
+						data-pipeline-stage
+						class="group is-active relative pl-12"
+					>
+						<span class="absolute top-0.5 left-0 flex size-6 items-center justify-center" aria-hidden="true">
+							<span class="absolute inset-0 rounded-full border-2 border-line bg-surface transition-all duration-300 group-[.is-active]:scale-110 group-[.is-active]:border-accent" />
+							<span class="relative size-1.5 rounded-full bg-line transition-colors duration-300 group-[.is-active]:bg-accent" />
+						</span>
+						<h3 class="font-mono text-sm font-semibold tracking-wide text-ink-muted transition-colors duration-300 group-[.is-active]:text-ink">
+							<span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+							{' '}{title}
+						</h3>
+						<p class="mt-2 max-w-prose text-sm text-ink-muted">{body}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	const section = document.querySelector<HTMLElement>('[data-pipeline]');
+	const progress = document.querySelector<SVGLineElement>(
+		'[data-pipeline-progress]',
+	);
+	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	if (section && progress && !reduceMotion) {
+		gsap.registerPlugin(ScrollTrigger);
+
+		const stageEls = gsap.utils.toArray<HTMLElement>('[data-pipeline-stage]');
+
+		/* Rewind the server-rendered "finished" state before first paint
+		   of the animation: line undrawn, stages inactive. */
+		for (const el of stageEls) el.classList.remove('is-active');
+
+		gsap.fromTo(
+			progress,
+			{ strokeDashoffset: 1 },
+			{
+				strokeDashoffset: 0,
+				ease: 'none',
+				scrollTrigger: {
+					trigger: section,
+					start: 'top 60%',
+					end: 'bottom 60%',
+					scrub: 0.5,
+				},
+			},
+		);
+
+		for (const el of stageEls) {
+			ScrollTrigger.create({
+				trigger: el,
+				start: 'top 60%',
+				onEnter: () => el.classList.add('is-active'),
+				onLeaveBack: () => el.classList.remove('is-active'),
+			});
+		}
+	}
+</script>
