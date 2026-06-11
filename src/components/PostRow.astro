@@ -4,17 +4,19 @@ import { formatDate } from '../utils/format';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
+	/** Heading level must fit the page's outline: h2 under a page h1, h3 under a section h2. */
+	headingLevel?: 'h2' | 'h3';
 }
 
-const { post } = Astro.props;
+const { post, headingLevel: Heading = 'h3' } = Astro.props;
 ---
 
 <article>
 	<a href={`/blog/${post.id}`} class="group block">
 		<div class="flex items-baseline justify-between gap-4">
-			<h3 class="text-lg font-medium transition-colors group-hover:text-accent">
+			<Heading class="text-lg font-medium transition-colors group-hover:text-accent">
 				{post.data.title}
-			</h3>
+			</Heading>
 			<time
 				datetime={post.data.pubDate.toISOString()}
 				class="shrink-0 font-mono text-xs text-ink-muted"

@@ -13,7 +13,7 @@ const posts = await getPublishedPosts();
 			{
 				posts.map((post) => (
 					<li>
-						<PostRow post={post} />
+						<PostRow post={post} headingLevel="h2" />
 					</li>
 				))
 			}

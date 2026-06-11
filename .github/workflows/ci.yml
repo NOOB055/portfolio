@@ -27,3 +27,6 @@ jobs:
       - run: npm ci
       - run: npx astro check
       - run: npm run build
+      # Performance/a11y budgets are gates, not dashboards: the build
+      # fails if scores regress below lighthouserc.json thresholds.
+      - run: npx --yes @lhci/cli@0.15.1 autorun

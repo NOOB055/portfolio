@@ -15,7 +15,7 @@ const entries = (await getCollection('achievements')).sort(
 			{
 				entries.map((entry) => (
 					<li>
-						<AchievementCard entry={entry} />
+						<AchievementCard entry={entry} headingLevel="h2" />
 					</li>
 				))
 			}

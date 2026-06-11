@@ -3,21 +3,23 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
 	entry: CollectionEntry<'achievements'>;
+	/** Heading level must fit the page's outline: h2 under a page h1, h3 under a section h2. */
+	headingLevel?: 'h2' | 'h3';
 }
 
-const { entry } = Astro.props;
+const { entry, headingLevel: Heading = 'h3' } = Astro.props;
 ---
 
 <article class="rounded-xl border border-line bg-surface-raised p-6">
 	<div class="flex items-baseline justify-between gap-4">
-		<h3 class="text-xl font-semibold tracking-tight">
+		<Heading class="text-xl font-semibold tracking-tight">
 			<a
 				href={`/achievements/${entry.id}`}
 				class="transition-colors hover:text-accent"
 			>
 				{entry.data.title}
 			</a>
-		</h3>
+		</Heading>
 		<p class="shrink-0 font-mono text-xs text-ink-muted">{entry.data.period}</p>
 	</div>
 	<p class="mt-1 text-sm text-ink-muted">{entry.data.role}</p>
