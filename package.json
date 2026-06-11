@@ -7,9 +7,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/csp-hashes.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@tailwindcss/typography": "^0.5.20",
+    "sharp": "^0.35.1",
     "typescript": "^6.0.3"
   }
 }

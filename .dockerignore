@@ -1,0 +1,9 @@
+.git
+node_modules
+dist
+.astro
+.vscode
+.github
+Dockerfile
+wrangler.jsonc
+README.md

@@ -6,7 +6,15 @@ const year = new Date().getFullYear();
 	<div
 		class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6 text-xs text-ink-muted"
 	>
-		<p>© {year} Joel Thomas</p>
+		<div class="flex items-center gap-4">
+			<p>© {year} Joel Thomas</p>
+			<a
+				href="/styleguide"
+				class="font-mono transition-colors hover:text-accent"
+			>
+				/styleguide
+			</a>
+		</div>
 		<div class="flex items-center gap-4">
 			<a
 				href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"

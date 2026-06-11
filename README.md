@@ -1,43 +1,67 @@
-# Astro Starter Kit: Minimal
+# joel.thomas — portfolio
 
-```sh
-npm create astro@latest -- --template minimal
+[![ci](https://github.com/NOOB055/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/NOOB055/portfolio/actions/workflows/ci.yml)
+
+Source for my personal site: **https://joel-thomas.joel-personal.workers.dev**
+
+DevSecOps engineer — secure, compliant infrastructure for finance and
+healthcare. This repo is itself a portfolio piece: the site is built and
+operated with the same discipline I bring to production platforms.
+
+## Stack
+
+- **[Astro 6](https://astro.build)** — static output, zero JS by default;
+  the only client-side script is the scroll-driven pipeline visualizer
+  (GSAP, code-split to the homepage)
+- **Tailwind CSS v4** — CSS-first config; all colors flow from semantic
+  OKLCH design tokens (see the living [style guide](https://joel-thomas.joel-personal.workers.dev/styleguide))
+- **Content collections** — blog, work, and certifications are local
+  MDX/YAML validated by Zod schemas at build time
+
+## Architecture notes
+
+- **Content is GitOps.** Every content change is a commit; CI + schema
+  validation act as admission control. Invalid frontmatter fails the
+  build — bad content cannot reach production.
+- **Drafts can't leak.** `draft: true` posts are previewable in `npm run
+  dev`, excluded from builds, and a permanent draft canary in the repo
+  guards the filter.
+- **Strict CSP, automated.** A post-build script hashes every inline
+  script and writes the Content-Security-Policy into `dist/_headers` —
+  no `unsafe-inline` for scripts, no hand-maintained hashes.
+- **Supply-chain hygiene.** GitHub Actions are pinned to commit SHAs;
+  the CI token is read-only.
+- **Theme without flash.** Dark/light mode is decided by an inline
+  script before first paint; tokens flip via one `data-theme` attribute.
+
+## Local development
+
+```bash
+npm install
+npm run dev      # http://localhost:4321 (drafts visible)
+npm run build    # static build + CSP generation -> dist/
+npx astro check  # type-check (strictest preset)
+npm run og       # regenerate the OpenGraph card
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Content workflow
 
-## 🚀 Project Structure
+| To add… | Do this |
+|---|---|
+| Blog post | `src/content/blog/<slug>.mdx` with `title/description/pubDate` frontmatter |
+| Work entry | `src/content/achievements/<slug>.mdx` (`featured: true` surfaces it on the homepage) |
+| Certification | `src/content/certifications/<slug>.yaml` |
 
-Inside of your Astro project, you'll see the following folders and files:
+Push to `main` → CI gates → Cloudflare builds and deploys to the edge.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+## Self-hosting
+
+The same site runs anywhere as a container:
+
+```bash
+docker build -t portfolio .
+docker run -p 8080:80 portfolio
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Multi-stage build; final image is nginx-alpine serving static files with
+sane cache and security headers.
