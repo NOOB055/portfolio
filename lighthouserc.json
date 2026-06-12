@@ -3,6 +3,10 @@
 		"collect": {
 			"staticDistDir": "./dist",
 			"numberOfRuns": 3,
+			"settings": {
+				"preset": "desktop",
+				"chromeFlags": "--no-sandbox"
+			},
 			"url": [
 				"http://localhost/",
 				"http://localhost/blog/",
@@ -12,16 +16,15 @@
 			]
 		},
 		"assert": {
-			"//": "3 runs, median-aggregated. Hard gates on the deterministic dimensions (a11y/seo/best-practices/CLS); CPU-timing metrics get runner-realistic headroom because gating tight on a shared CI runner produces false failures.",
+			"//": "Desktop preset (1x CPU, no mobile throttle) — representative of the audience and stable on shared CI runners, unlike the default mobile 4x throttle stacked on a slow 2-core box. 3 runs, median. Hard gates on the deterministic dimensions; LCP tracked as a warning.",
 			"assertions": {
-				"categories:performance": ["error", { "minScore": 0.85 }],
+				"categories:performance": ["error", { "minScore": 0.9 }],
 				"categories:accessibility": ["error", { "minScore": 0.95 }],
 				"categories:best-practices": ["error", { "minScore": 0.95 }],
 				"categories:seo": ["error", { "minScore": 0.95 }],
 				"cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
 				"largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }]
 			}
-		},
-		"upload": { "target": "temporary-public-storage" }
+		}
 	}
 }

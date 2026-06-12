@@ -5,6 +5,24 @@
 @plugin "@tailwindcss/typography";
 
 /*
+ * Metric-matched fallback for Inter (the fontaine technique). While the
+ * web font loads, text renders in a system sans-serif whose metrics are
+ * overridden to match Inter's — so the eventual swap reflows nothing.
+ * This is what kills font-swap CLS on text-heavy prose pages (the
+ * article body was shifting ~0.08 without it). Liberation Sans/Arimo is
+ * the Arial-equivalent present on Linux CI; Arial/Helvetica cover macOS.
+ */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Arimo"),
+    local("Helvetica Neue"), local("Helvetica");
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  size-adjust: 107.12%;
+}
+
+/*
  * Tailwind's `dark:` variant is driven by an explicit data-theme attribute
  * (set before first paint by the inline script in BaseLayout), not by
  * prefers-color-scheme alone — the user's manual choice must win.
@@ -51,7 +69,7 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
 
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
 }
 
