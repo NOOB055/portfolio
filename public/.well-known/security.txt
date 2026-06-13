@@ -2,4 +2,4 @@
 Contact: https://www.linkedin.com/in/joel-mathew-thomas-devsecops/
 Expires: 2027-06-12T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://joel-thomas.joel-personal.workers.dev/.well-known/security.txt
+Canonical: https://joel-thomas.devsecop.workers.dev/.well-known/security.txt

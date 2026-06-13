@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://joel-thomas.joel-personal.workers.dev/sitemap-index.xml
+Sitemap: https://joel-thomas.devsecop.workers.dev/sitemap-index.xml
