@@ -12,7 +12,8 @@
 				"http://localhost/blog/",
 				"http://localhost/blog/why-deploys-should-be-boring/",
 				"http://localhost/achievements/",
-				"http://localhost/certifications/"
+				"http://localhost/certifications/",
+				"http://localhost/contact/"
 			]
 		},
 		"assert": {

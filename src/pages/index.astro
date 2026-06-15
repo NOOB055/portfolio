@@ -4,7 +4,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PipelineSection from '../components/pipeline/PipelineSection.astro';
 import AchievementCard from '../components/AchievementCard.astro';
 import PostRow from '../components/PostRow.astro';
-import ContactForm from '../components/ContactForm.astro';
 import { getPublishedPosts } from '../utils/collections';
 
 const featured = await getCollection('achievements', ({ data }) => data.featured);
@@ -83,10 +82,16 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 					Let's talk infrastructure.
 				</h2>
 				<p class="mx-auto mt-3 max-w-md text-sm text-ink-muted">
-					Open to senior DevSecOps and platform engineering roles. Send a
-					message below, or reach me on LinkedIn and GitHub.
+					Open to senior DevSecOps and platform engineering roles — get in
+					touch.
 				</p>
-				<div class="mt-6 flex items-center justify-center gap-4">
+				<div class="mt-6 flex flex-wrap items-center justify-center gap-4">
+					<a
+						href="/contact"
+						class="rounded-md border border-accent px-4 py-2 font-mono text-xs text-accent transition-colors hover:bg-accent hover:text-surface"
+					>
+						send a message →
+					</a>
 					<a
 						href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"
 						target="_blank"
@@ -105,7 +110,6 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 					</a>
 				</div>
 			</div>
-			<ContactForm />
 		</div>
 	</section>
 </BaseLayout>
