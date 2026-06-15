@@ -10,7 +10,7 @@ export const stages: PipelineStage[] = [
 		id: 'build',
 		title: 'Build',
 		body: 'One build per change, pinned by digest and promoted unchanged from dev to prod. If staging and production ran different bytes, you never tested what you shipped.',
-		tools: ['jenkins', 'docker', 'ansible'],
+		tools: ['jenkins', 'docker'],
 	},
 	{
 		id: 'test',
@@ -27,7 +27,7 @@ export const stages: PipelineStage[] = [
 	{
 		id: 'deploy',
 		title: 'Deploy',
-		body: 'Pull-based GitOps: the cluster converges on what Git declares, identically across regions, scaling itself to load. Nobody pushes to prod, so rollback is a revert — not a 2 a.m. war room.',
+		body: 'Pull-based GitOps: the cluster converges on what Git declares — the same flow whether it runs on AWS or on-prem, identically across regions. Nobody pushes to prod, so rollback is a revert, not a 2 a.m. war room.',
 		tools: ['argocd', 'terraform', 'k8s', 'karpenter'],
 	},
 	{
