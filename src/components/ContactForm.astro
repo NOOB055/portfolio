@@ -2,15 +2,14 @@
 /*
  * Static-site contact form. Submissions POST to Web3Forms (which relays
  * to the owner's inbox — the email address never appears on the page).
- * Spam defence: an invisible honeypot (`botcheck`) plus Cloudflare
- * Turnstile, verified server-side by Web3Forms. Turnstile is lazy-loaded
- * on first interaction so it never touches the page's initial load.
+ * Spam defence: an invisible honeypot (`botcheck`) plus Web3Forms'
+ * server-side spam filter. No third-party CAPTCHA (zero friction for
+ * real visitors); escalate to one only if spam actually shows up.
  *
- * Both keys here are PUBLIC by design (Web3Forms access key + Turnstile
- * site key). The Turnstile *secret* lives only in Web3Forms, never here.
+ * The access key is PUBLIC by design — it only routes submissions to
+ * the owner's inbox; the email address itself is never in the page.
  */
 const WEB3FORMS_ACCESS_KEY = '6e90a500-67cd-4d03-928a-e86a7b570129';
-const TURNSTILE_SITE_KEY = '0x4AAAAAADk-sqJ664UPjhFA';
 
 const field =
 	'mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition-colors focus-visible:border-accent';
@@ -54,8 +53,6 @@ const label = 'block font-mono text-xs text-ink-muted';
 		<textarea id="cf-message" name="message" required rows="5" class={field}></textarea>
 	</div>
 
-	<div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
-
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
 		<button
 			type="submit"
@@ -72,20 +69,6 @@ const label = 'block font-mono text-xs text-ink-muted';
 	const status = document.getElementById('cf-status');
 
 	if (form && status) {
-		/* Lazy-load Turnstile on first interaction: keeps the third-party
-		   script off the initial page load (and out of Lighthouse). */
-		let tsRequested = false;
-		const loadTurnstile = () => {
-			if (tsRequested) return;
-			tsRequested = true;
-			const s = document.createElement('script');
-			s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-			s.async = true;
-			s.defer = true;
-			document.head.appendChild(s);
-		};
-		form.addEventListener('focusin', loadTurnstile, { once: true });
-
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			if (!form.checkValidity()) {
@@ -107,9 +90,6 @@ const label = 'block font-mono text-xs text-ink-muted';
 				if (json.success) {
 					status.textContent = 'Thanks — your message is on its way.';
 					form.reset();
-					(window as any).turnstile?.reset();
-				} else if ((json.message ?? '').toLowerCase().includes('captcha')) {
-					status.textContent = 'Please complete the verification and try again.';
 				} else {
 					status.textContent = 'Could not send — please reach me on LinkedIn instead.';
 				}
