@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PipelineSection from '../components/pipeline/PipelineSection.astro';
 import AchievementCard from '../components/AchievementCard.astro';
 import PostRow from '../components/PostRow.astro';
+import ContactForm from '../components/ContactForm.astro';
 import { getPublishedPosts } from '../utils/collections';
 
 const featured = await getCollection('achievements', ({ data }) => data.featured);
@@ -75,33 +76,36 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 	</section>
 
 	<section aria-label="Contact" class="mx-auto max-w-3xl px-6 pb-24">
-		<div class="rounded-xl border border-line bg-surface-raised p-8 text-center">
-			<p class="font-mono text-xs text-accent">contact</p>
-			<h2 class="mt-1 text-2xl font-bold tracking-tight">
-				Let's talk infrastructure.
-			</h2>
-			<p class="mx-auto mt-3 max-w-md text-sm text-ink-muted">
-				Open to senior DevSecOps and platform engineering roles. LinkedIn is
-				the fastest way to reach me; the code lives on GitHub.
-			</p>
-			<div class="mt-6 flex items-center justify-center gap-4">
-				<a
-					href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"
-					target="_blank"
-					rel="me noopener"
-					class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
-				>
-					linkedin ↗
-				</a>
-				<a
-					href="https://github.com/NOOB055"
-					target="_blank"
-					rel="me noopener"
-					class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
-				>
-					github ↗
-				</a>
+		<div class="rounded-xl border border-line bg-surface-raised p-8">
+			<div class="text-center">
+				<p class="font-mono text-xs text-accent">contact</p>
+				<h2 class="mt-1 text-2xl font-bold tracking-tight">
+					Let's talk infrastructure.
+				</h2>
+				<p class="mx-auto mt-3 max-w-md text-sm text-ink-muted">
+					Open to senior DevSecOps and platform engineering roles. Send a
+					message below, or reach me on LinkedIn and GitHub.
+				</p>
+				<div class="mt-6 flex items-center justify-center gap-4">
+					<a
+						href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"
+						target="_blank"
+						rel="me noopener"
+						class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+					>
+						linkedin ↗
+					</a>
+					<a
+						href="https://github.com/NOOB055"
+						target="_blank"
+						rel="me noopener"
+						class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+					>
+						github ↗
+					</a>
+				</div>
 			</div>
+			<ContactForm />
 		</div>
 	</section>
 </BaseLayout>

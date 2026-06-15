@@ -1,0 +1,121 @@
+---
+/*
+ * Static-site contact form. Submissions POST to Web3Forms (which relays
+ * to the owner's inbox — the email address never appears on the page).
+ * Spam defence: an invisible honeypot (`botcheck`) plus Cloudflare
+ * Turnstile, verified server-side by Web3Forms. Turnstile is lazy-loaded
+ * on first interaction so it never touches the page's initial load.
+ *
+ * Both keys here are PUBLIC by design (Web3Forms access key + Turnstile
+ * site key). The Turnstile *secret* lives only in Web3Forms, never here.
+ */
+const WEB3FORMS_ACCESS_KEY = '6e90a500-67cd-4d03-928a-e86a7b570129';
+const TURNSTILE_SITE_KEY = '0x4AAAAAADk-sqJ664UPjhFA';
+
+const field =
+	'mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition-colors focus-visible:border-accent';
+const label = 'block font-mono text-xs text-ink-muted';
+---
+
+<form id="contact-form" class="mt-8 space-y-4 text-left" novalidate>
+	<input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+	{/* honeypot — hidden from humans, tempting to bots */}
+	<input
+		type="checkbox"
+		name="botcheck"
+		tabindex="-1"
+		autocomplete="off"
+		aria-hidden="true"
+		class="hidden"
+		style="display:none"
+	/>
+
+	<div class="grid gap-4 sm:grid-cols-2">
+		<div>
+			<label for="cf-name" class={label}>Name <span class="text-accent">*</span></label>
+			<input id="cf-name" name="name" type="text" required autocomplete="name" class={field} />
+		</div>
+		<div>
+			<label for="cf-email" class={label}>Email <span class="text-accent">*</span></label>
+			<input id="cf-email" name="email" type="email" required autocomplete="email" class={field} />
+		</div>
+		<div>
+			<label for="cf-phone" class={label}>Phone (optional)</label>
+			<input id="cf-phone" name="phone" type="tel" autocomplete="tel" class={field} />
+		</div>
+		<div>
+			<label for="cf-subject" class={label}>Subject (optional)</label>
+			<input id="cf-subject" name="subject" type="text" class={field} />
+		</div>
+	</div>
+
+	<div>
+		<label for="cf-message" class={label}>Message <span class="text-accent">*</span></label>
+		<textarea id="cf-message" name="message" required rows="5" class={field}></textarea>
+	</div>
+
+	<div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
+
+	<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+		<button
+			type="submit"
+			class="rounded-md border border-line px-4 py-2 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+		>
+			send message
+		</button>
+		<p id="cf-status" role="status" aria-live="polite" class="text-xs text-ink-muted"></p>
+	</div>
+</form>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+	const status = document.getElementById('cf-status');
+
+	if (form && status) {
+		/* Lazy-load Turnstile on first interaction: keeps the third-party
+		   script off the initial page load (and out of Lighthouse). */
+		let tsRequested = false;
+		const loadTurnstile = () => {
+			if (tsRequested) return;
+			tsRequested = true;
+			const s = document.createElement('script');
+			s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+			s.async = true;
+			s.defer = true;
+			document.head.appendChild(s);
+		};
+		form.addEventListener('focusin', loadTurnstile, { once: true });
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			if (!form.checkValidity()) {
+				form.reportValidity();
+				return;
+			}
+			const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+			if (data.botcheck) return; // honeypot tripped
+			if (!data.subject) data.subject = `Portfolio contact from ${data.name}`;
+
+			status.textContent = 'Sending…';
+			try {
+				const res = await fetch('https://api.web3forms.com/submit', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+					body: JSON.stringify(data),
+				});
+				const json = await res.json();
+				if (json.success) {
+					status.textContent = 'Thanks — your message is on its way.';
+					form.reset();
+					(window as any).turnstile?.reset();
+				} else if ((json.message ?? '').toLowerCase().includes('captcha')) {
+					status.textContent = 'Please complete the verification and try again.';
+				} else {
+					status.textContent = 'Could not send — please reach me on LinkedIn instead.';
+				}
+			} catch {
+				status.textContent = 'Network error — please reach me on LinkedIn instead.';
+			}
+		});
+	}
+</script>

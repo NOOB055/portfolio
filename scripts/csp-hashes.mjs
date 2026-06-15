@@ -38,10 +38,14 @@ for (const file of htmlFiles) {
 
 const csp = [
 	"default-src 'self'",
-	`script-src 'self' ${[...hashes].join(' ')}`.trimEnd(),
+	// challenges.cloudflare.com: Turnstile script. Hashes: our inline scripts.
+	`script-src 'self' https://challenges.cloudflare.com ${[...hashes].join(' ')}`.trimEnd(),
 	"style-src 'self' 'unsafe-inline'",
 	"img-src 'self' data:",
 	"font-src 'self'",
+	// web3forms: contact-form POST. challenges.cloudflare.com: Turnstile challenge.
+	"connect-src 'self' https://api.web3forms.com https://challenges.cloudflare.com",
+	"frame-src https://challenges.cloudflare.com",
 	"object-src 'none'",
 	"base-uri 'self'",
 	"frame-ancestors 'none'",
