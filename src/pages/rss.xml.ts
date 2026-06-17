@@ -8,7 +8,7 @@ export async function GET(context: APIContext) {
 	);
 
 	return rss({
-		title: 'Joel Thomas — Blog',
+		title: 'Joel Mathew Thomas — Blog',
 		description:
 			'Notes on DevSecOps, GitOps, Kubernetes, and keeping deploys boring.',
 		site: context.site ?? '',
