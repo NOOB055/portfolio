@@ -1,0 +1,21 @@
+/* TEAM */
+  DevSecOps engineer & maker: Joel Mathew Thomas
+  GitHub:   github.com/NOOB055
+  LinkedIn: linkedin.com/in/joel-mathew-thomas-devsecops
+  Location: Kochi, Kerala, India
+
+/* PHILOSOPHY */
+  God is in the details.
+  Deploys should be boring.
+  The cluster pulls; humans don't push.
+  Build once, promote forever.
+
+/* STACK */
+  Astro · Tailwind CSS · GSAP · TypeScript (strictest)
+  Cloudflare Workers (static assets) · GitHub Actions CI · Lighthouse budgets
+  Content: MDX + Zod-validated collections — GitOps all the way down
+
+/* COLOPHON */
+  No trackers. No cookies. No third-party fonts.
+  Every commit gated; deployed straight from the SHA in the footer.
+  You found humans.txt. Of course you did.

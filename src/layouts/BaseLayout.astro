@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SiteScripts from '../components/SiteScripts.astro';
 
 interface Props {
 	title: string;
@@ -28,6 +29,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="author" href="/humans.txt" />
 		<meta name="generator" content={Astro.generator} />
 		<meta
 			name="google-site-verification"
@@ -71,6 +73,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 			 * JS on the site, and it exists purely to make theme flash
 			 * impossible. Stored preference wins; OS preference is the fallback.
 			 */
+			document.documentElement.classList.add('js');
 			document.documentElement.dataset.theme =
 				localStorage.getItem('theme') ??
 				(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -88,5 +91,6 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 			<slot />
 		</main>
 		<SiteFooter />
+		<SiteScripts />
 	</body>
 </html>

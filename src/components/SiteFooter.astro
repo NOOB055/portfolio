@@ -1,18 +1,26 @@
 ---
 const year = new Date().getFullYear();
+const commit = import.meta.env.PUBLIC_COMMIT ?? 'dev';
+const buildDate = import.meta.env.PUBLIC_BUILD_DATE ?? '';
 ---
 
 <footer class="border-t border-line">
 	<div
 		class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6 text-xs text-ink-muted"
 	>
-		<div class="flex items-center gap-4">
+		<div class="flex flex-wrap items-center gap-x-4 gap-y-1">
 			<p>© {year} Joel Thomas</p>
-			<a
-				href="/styleguide"
-				class="font-mono transition-colors hover:text-accent"
-			>
+			<a href="/styleguide" class="link-anim font-mono hover:text-accent">
 				/styleguide
+			</a>
+			<a
+				href={`https://github.com/NOOB055/portfolio/commit/${commit}`}
+				target="_blank"
+				rel="noopener"
+				title={`deployed build · ${buildDate}`}
+				class="link-anim font-mono hover:text-accent"
+			>
+				{commit}
 			</a>
 		</div>
 		<div class="flex items-center gap-4">
@@ -20,7 +28,7 @@ const year = new Date().getFullYear();
 				href="https://www.linkedin.com/in/joel-mathew-thomas-devsecops/"
 				rel="me noopener"
 				target="_blank"
-				class="font-mono transition-colors hover:text-accent"
+				class="link-anim font-mono hover:text-accent"
 			>
 				linkedin ↗
 			</a>
@@ -28,7 +36,7 @@ const year = new Date().getFullYear();
 				href="https://github.com/NOOB055"
 				rel="me noopener"
 				target="_blank"
-				class="font-mono transition-colors hover:text-accent"
+				class="link-anim font-mono hover:text-accent"
 			>
 				github ↗
 			</a>

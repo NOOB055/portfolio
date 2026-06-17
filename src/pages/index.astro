@@ -26,7 +26,7 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 
 	<PipelineSection />
 
-	<section aria-label="Featured work" class="mx-auto max-w-3xl px-6 py-24">
+	<section data-reveal aria-label="Featured work" class="mx-auto max-w-3xl px-6 py-24">
 		<header class="flex items-baseline justify-between">
 			<div>
 				<p class="font-mono text-xs text-accent">proof</p>
@@ -50,7 +50,7 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 		</ul>
 	</section>
 
-	<section aria-label="Recent writing" class="mx-auto max-w-3xl px-6 pb-24">
+	<section data-reveal aria-label="Recent writing" class="mx-auto max-w-3xl px-6 pb-24">
 		<header class="flex items-baseline justify-between">
 			<div>
 				<p class="font-mono text-xs text-accent">notes</p>
@@ -74,7 +74,7 @@ const recentPosts = (await getPublishedPosts()).slice(0, 3);
 		</ul>
 	</section>
 
-	<section aria-label="Contact" class="mx-auto max-w-3xl px-6 pb-24">
+	<section data-reveal aria-label="Contact" class="mx-auto max-w-3xl px-6 pb-24">
 		<div class="rounded-xl border border-line bg-surface-raised p-8">
 			<div class="text-center">
 				<p class="font-mono text-xs text-accent">contact</p>

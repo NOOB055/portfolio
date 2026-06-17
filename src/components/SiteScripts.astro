@@ -1,0 +1,93 @@
+---
+/*
+ * Progressive enhancements — every one is optional and degrades to nothing.
+ * Bundled (served from 'self'), so no CSP hash needed. None of this is
+ * required for the site to read, navigate, or submit.
+ */
+---
+
+<script>
+	// — Console greeting, for whoever opens DevTools —
+	console.log(
+		'%c~/joel.thomas',
+		'color:#34d399;font:bold 18px ui-monospace,SFMono-Regular,monospace',
+	);
+	console.log(
+		'%cYou opened the console — of course you did.\n\n' +
+			'DevSecOps engineer · I keep mission-critical deploys boring.\n' +
+			'This site is static; the footer shows the exact commit it was built from.\n' +
+			"And yes — there's a Konami code.\n\n" +
+			'github.com/NOOB055',
+		'color:#9ca3af;font:13px ui-monospace,monospace;line-height:1.6',
+	);
+
+	const isTyping = (el: EventTarget | null) =>
+		el instanceof HTMLElement &&
+		(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+
+	// — Konami code → a tasteful, on-brand toast —
+	const seq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+	let kpos = 0;
+	const konami = () => {
+		let el = document.getElementById('konami-toast');
+		if (!el) {
+			el = document.createElement('div');
+			el.id = 'konami-toast';
+			el.setAttribute('role', 'status');
+			el.textContent = '▲ manual deploy detected — tsk. (nice find. deploys should be boring.)';
+			document.body.appendChild(el);
+		}
+		const toast = el;
+		toast.classList.add('show');
+		window.clearTimeout(Number(toast.dataset.t));
+		toast.dataset.t = String(window.setTimeout(() => toast.classList.remove('show'), 4000));
+	};
+
+	// — Keyboard niceties: t = toggle theme; g then h/b/w/c = navigate —
+	let gPending = false;
+	let gTimer = 0;
+	addEventListener('keydown', (e) => {
+		if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+		const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
+		kpos = k === seq[kpos] ? kpos + 1 : k === seq[0] ? 1 : 0;
+		if (kpos === seq.length) {
+			kpos = 0;
+			konami();
+		}
+
+		if (gPending) {
+			gPending = false;
+			const dest: Record<string, string> = { h: '/', b: '/blog', w: '/achievements', c: '/contact' };
+			if (dest[k]) {
+				e.preventDefault();
+				location.href = dest[k];
+				return;
+			}
+		}
+		if (k === 'g') {
+			gPending = true;
+			clearTimeout(gTimer);
+			gTimer = window.setTimeout(() => (gPending = false), 1000);
+			return;
+		}
+		if (k === 't') document.getElementById('theme-toggle')?.click();
+	});
+
+	// — Subtle scroll reveal (CSS gates it on .js + no-reduced-motion) —
+	const reveals = document.querySelectorAll('[data-reveal]');
+	if (reveals.length && 'IntersectionObserver' in window) {
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const en of entries) {
+					if (en.isIntersecting) {
+						en.target.classList.add('is-revealed');
+						io.unobserve(en.target);
+					}
+				}
+			},
+			{ rootMargin: '0px 0px -10% 0px' },
+		);
+		reveals.forEach((r) => io.observe(r));
+	}
+</script>

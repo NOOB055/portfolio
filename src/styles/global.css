@@ -106,6 +106,65 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Progressive enhancements — all degrade gracefully.                 */
+/* Gated on `.js` (set before paint) so no-JS users never see a        */
+/* hidden state, and on reduced-motion so it's opt-out by default.     */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+  .js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Konami-code toast (created on demand by SiteScripts) */
+#konami-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 50;
+  transform: translateX(-50%) translateY(0.75rem);
+  border: 1px solid var(--accent);
+  border-radius: 0.5rem;
+  background: var(--surface-raised);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+#konami-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Animated link underline — grows from the left on hover/focus */
+.link-anim {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition:
+    background-size 0.25s ease,
+    color 0.15s ease;
+}
+.link-anim:hover,
+.link-anim:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ------------------------------------------------------------------ */
 /* Prose (article bodies rendered from MDX): map every typography     */
 /* color to our semantic tokens so long-form text is theme-aware      */
 /* without a separate dark variant.                                   */
