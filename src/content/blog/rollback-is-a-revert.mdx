@@ -1,0 +1,54 @@
+---
+title: 'Rollback is a revert, not a war room'
+description: "The real test of a deployment system isn't how it ships — it's how it un-ships. Making rollback a one-line operation, and the part that's genuinely hard."
+pubDate: 2026-06-15
+tags: ['principles', 'ci-cd', 'reliability']
+---
+
+Everyone evaluates a deployment system by how it ships: speed, automation,
+green dashboards. Wrong test. The real test is how it *un-ships* — because
+the deploy you need to undo is never the calm one.
+
+Ask a team how they roll back. If the answer involves remembering which
+version was good, re-running a pipeline with the right parameters by hand, a
+senior engineer who "knows how," or a runbook nobody has executed under
+pressure — that's not a rollback plan. It's a bet that the next failure will
+be a gentle one.
+
+The principle I hold: **rollback should be `git revert`.** You revert the
+commit that declared the bad state, and the system reconciles back to where
+it was. No memory, no heroics, no war room. The same boring mechanism that
+shipped the change unships it.
+
+Making that literally true takes three things, and the third is the hard one.
+
+**Immutable, digest-pinned artifacts.** Reverting a config change only
+restores the previous behaviour if the previous config still points at the
+exact same bytes. If your tags are mutable — `latest`, or a tag someone
+re-pushed — reverting the manifest hands you a *different* artifact than you
+had before. Pin by digest, and a revert becomes a real time machine.
+
+**Declarative everything.** Rollback works when the system's state is fully
+described by what's in Git. The moment a deploy has imperative side effects —
+a script that ran once, a manual step, a resource created out of band —
+reverting the declaration doesn't undo the side effect. Every escape hatch
+from declarative state is something your rollback silently won't fix.
+
+**Backward-compatible data changes — the genuinely hard part.** Config and
+code revert cleanly. Schema and data do not. If a deploy includes a
+destructive migration — a dropped column, a renamed table — then `git revert`
+rolls the code back to something that no longer matches the database, and the
+data that migration discarded isn't coming back from a code revert at all. One
+incident becomes two, and the second is data loss. The discipline that makes rollback safe
+is expand-and-contract: additive, backward-compatible changes deployed
+separately from the destructive cleanup, so the previous version always still
+runs against the current schema. It's tedious. It's also the line between a
+rollback and an outage.
+
+So the honest version of the principle carries a caveat: rollback is a revert
+*for everything you had the discipline to keep declarative and
+backward-compatible.* The rest you'll be fixing by hand at 2 a.m. — which is
+exactly the incentive to keep that "rest" as small as possible.
+
+And one more, learned the boring way: **a rollback you've never executed is a
+hope, not a plan.** Practise it when nothing is on fire.

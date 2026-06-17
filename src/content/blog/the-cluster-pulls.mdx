@@ -1,0 +1,53 @@
+---
+title: "The cluster pulls; humans don't push"
+description: "Pull-based GitOps isn't a deployment style — it's a security boundary. Why nothing outside production should hold a write credential to it."
+pubDate: 2026-06-15
+tags: ['principles', 'gitops', 'security']
+---
+
+Most teams describe GitOps as a convenience: changes land in Git, something
+syncs them to the cluster. That undersells it. The interesting part of
+pull-based GitOps isn't the convenience — it's where the credentials live.
+
+In a push pipeline, a human or a CI runner holds write access to production.
+To deploy, something *outside* the cluster reaches *in* and changes it. That
+standing access is an attack surface that never sleeps: compromise the CI
+system, phish the engineer, leak the kubeconfig, and you own production. The
+credential exists whether or not anyone is deploying.
+
+Pull-based GitOps inverts the direction. A reconciler — ArgoCD, in the
+systems I run — watches a Git repository and continuously converges the
+running state toward what Git declares. No engineer and no CI runner reaches
+*into* production to change it; the reconciler does, from the inside. You
+don't make the powerful credential disappear — the reconciler still holds one
+— but you collapse it from "every human and pipeline with prod access" down
+to a single, auditable, non-human actor.
+
+That inversion buys three things that matter more than convenience.
+
+**Least privilege, by construction.** No engineer and no CI job holds
+cluster-admin. The only thing that changes production is the reconciler, and
+the only way to instruct it is to change Git. Revoke every human's prod
+access and deployments still work.
+
+**The interface to production becomes a pull request.** If the only way to
+change prod is to change Git, then the only way to change prod is through
+review. Authorization stops being a policy you ask people to honour and
+becomes a permission model in which the unreviewed change has no path. That's
+the difference between a control and a suggestion.
+
+**Drift is detected, not discovered.** Because the reconciler continuously
+compares declared state to actual state, configuration drift — someone's
+2 a.m. `kubectl edit` — gets surfaced, and with self-heal enabled, reverted
+automatically. The system notices, instead of you finding out during an
+incident.
+
+None of this is free. Pull-based GitOps demands discipline: everything has to
+be declarative, secrets need [a story that isn't "commit them"](/blog/secrets-never-live-in-code/),
+and break-glass access has to be designed deliberately rather than left as
+the default. The reconciler itself holds powerful credentials and has to be
+protected accordingly.
+
+But the principle underneath is simple, and I'd defend it anywhere: **if a
+person can push to production, production has a person-shaped hole in it.**
+Close the hole. Let the cluster pull.
