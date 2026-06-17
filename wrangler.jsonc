@@ -1,7 +1,7 @@
 {
 	// Cloudflare Workers config: assets-only deployment — the built
 	// static site is served from the edge, no server code at all.
-	"name": "joel-thomas",
+	"name": "joel-mathew-thomas",
 	"compatibility_date": "2026-06-11",
 	"assets": {
 		"directory": "./dist",

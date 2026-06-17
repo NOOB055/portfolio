@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/NOOB055/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/NOOB055/portfolio/actions/workflows/ci.yml)
 
-Source for my personal site: **https://joel-thomas.joel-personal.workers.dev**
+Source for my personal site: **https://joel-mathew-thomas.devsecop.workers.dev**
 
 DevSecOps engineer — secure, compliant infrastructure for finance and
 healthcare. This repo is itself a portfolio piece: the site is built and
@@ -14,7 +14,7 @@ operated with the same discipline I bring to production platforms.
   the only client-side script is the scroll-driven pipeline visualizer
   (GSAP, code-split to the homepage)
 - **Tailwind CSS v4** — CSS-first config; all colors flow from semantic
-  OKLCH design tokens (see the living [style guide](https://joel-thomas.joel-personal.workers.dev/styleguide))
+  OKLCH design tokens (see the living [style guide](https://joel-mathew-thomas.devsecop.workers.dev/styleguide))
 - **Content collections** — blog, work, and certifications are local
   MDX/YAML validated by Zod schemas at build time
 
