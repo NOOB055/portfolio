@@ -8,18 +8,35 @@
 
 <script>
 	// — Console greeting, for whoever opens DevTools —
+	// A nod to minds worth standing on the shoulders of — picked at random.
+	const lore = [
+		'"Nothing in life is to be feared, it is only to be understood." — Marie Curie',
+		'"The important thing is not to stop questioning." — Albert Einstein',
+		'"The present is theirs; the future, for which I really worked, is mine." — Nikola Tesla',
+		'"The most dangerous phrase in the language is: we\'ve always done it this way." — Grace Hopper',
+		'"Simplicity is prerequisite for reliability." — Edsger W. Dijkstra',
+		'"You must not fool yourself — and you are the easiest person to fool." — Richard Feynman',
+		'"We can only see a short distance ahead, but we can see plenty there that needs to be done." — Alan Turing',
+		'"An equation has no meaning for me unless it expresses a thought of God." — Srinivasa Ramanujan',
+		"A distributed system is one where a computer you didn't know existed can break your own. — Leslie Lamport",
+		'Grace Hopper logged the first computer "bug" in 1947 — a real moth, taped into the logbook.',
+		'Hedy Lamarr co-invented frequency hopping — the idea behind Wi-Fi and Bluetooth.',
+	];
+	const pick = () => lore[Math.floor(Math.random() * lore.length)];
+
 	console.log(
 		'%c~/joel.thomas',
 		'color:#34d399;font:bold 18px ui-monospace,SFMono-Regular,monospace',
 	);
 	console.log(
 		'%cYou opened the console — of course you did.\n\n' +
-			'DevSecOps engineer · I keep mission-critical deploys boring.\n' +
-			'This site is static; the footer shows the exact commit it was built from.\n' +
-			"And yes — there's a Konami code.\n\n" +
+			'DevSecOps engineer. I keep mission-critical deploys boring.\n' +
+			'This site is static, and the footer shows the exact commit it shipped from.\n' +
+			"There's a Konami code too, if you're feeling nostalgic.\n\n" +
 			'github.com/NOOB055',
 		'color:#9ca3af;font:13px ui-monospace,monospace;line-height:1.6',
 	);
+	console.log('%c' + pick(), 'color:#6b7280;font:italic 12px ui-monospace,monospace');
 
 	const isTyping = (el: EventTarget | null) =>
 		el instanceof HTMLElement &&
@@ -34,13 +51,13 @@
 			el = document.createElement('div');
 			el.id = 'konami-toast';
 			el.setAttribute('role', 'status');
-			el.textContent = '▲ manual deploy detected — tsk. (nice find. deploys should be boring.)';
 			document.body.appendChild(el);
 		}
 		const toast = el;
+		toast.textContent = pick(); // a fresh mind each time you enter the code
 		toast.classList.add('show');
 		window.clearTimeout(Number(toast.dataset.t));
-		toast.dataset.t = String(window.setTimeout(() => toast.classList.remove('show'), 4000));
+		toast.dataset.t = String(window.setTimeout(() => toast.classList.remove('show'), 6500));
 	};
 
 	// — Keyboard niceties: t = toggle theme; g then h/b/w/c = navigate —

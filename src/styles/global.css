@@ -130,13 +130,17 @@
   bottom: 1.5rem;
   left: 50%;
   z-index: 50;
+  max-width: min(90vw, 34rem);
   transform: translateX(-50%) translateY(0.75rem);
   border: 1px solid var(--accent);
   border-radius: 0.5rem;
   background: var(--surface-raised);
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1.1rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
   color: var(--ink);
   opacity: 0;
   pointer-events: none;
